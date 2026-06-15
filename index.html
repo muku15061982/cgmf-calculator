@@ -1,204 +1,41 @@
-.<!DOCTYPE html>
-<html lang="hi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CGMF Financial Calculator</title>
-
-<style>
-body{
-font-family:Arial,sans-serif;
-max-width:800px;
-margin:auto;
-padding:20px;
-background:#f5f5f5;
-}
-
-.card{
-background:#fff;
-padding:20px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
-}
-
-h1,h2{
-text-align:center;
-color:#5e2a84;
-}
-
-input{
-width:100%;
-padding:10px;
-margin:8px 0;
-box-sizing:border-box;
-}
-
-button{
-width:100%;
-padding:12px;
-background:#5e2a84;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
-font-size:16px;
-}
-
-.result{
-margin-top:15px;
-font-weight:bold;
-font-size:18px;
-}
-
-.whatsapp{
-background:#25D366;
-margin-top:10px;
-}
-
-.account{
-background:#ff6b00;
-margin-top:10px;
-}
-
-.tabs{
-display:flex;
-gap:10px;
-margin-bottom:20px;
-}
-
-.tabs button{
-flex:1;
-}
-</style>
-</head>
-
-<body>
-
-<h1>CGMF Financial Calculator</h1>
-
-<div class="tabs">
-<button onclick="showTab('sip')">SIP</button>
-<button onclick="showTab('lumpsum')">Lumpsum</button>
-<button onclick="showTab('swp')">SWP</button>
-</div>
-
-<div id="sip" class="card">
-
-<h2>SIP Calculator</h2>
+<h2>CGMF Investment Calculator</h2>
 
 <label>Monthly SIP (₹)</label>
-<input type="number" id="sipAmount" value="500">
+<input type="number" id="sip" value="500"><br><br>
+
+<label>Lump Sum Investment (₹)</label>
+<input type="number" id="lump" value="10000"><br><br>
 
 <label>Years</label>
-<input type="number" id="sipYears" value="20">
+<input type="number" id="years" value="20"><br><br>
 
 <label>Expected Return (%)</label>
-<input type="number" id="sipRate" value="12">
+<input type="number" id="rate" value="12"><br><br>
 
-<button onclick="calcSIP()">Calculate SIP</button>
+<button onclick="calc()">Calculate</button>
 
-<div class="result" id="sipResult"></div>
-
-</div>
-
-<div id="lumpsum" class="card" style="display:none;">
-
-<h2>Lumpsum Calculator</h2>
-
-<label>Investment Amount (₹)</label>
-<input type="number" id="lumpAmount" value="10000">
-
-<label>Years</label>
-<input type="number" id="lumpYears" value="10">
-
-<label>Expected Return (%)</label>
-<input type="number" id="lumpRate" value="12">
-
-<button onclick="calcLumpsum()">Calculate Lumpsum</button>
-
-<div class="result" id="lumpResult"></div>
-
-</div>
-
-<div id="swp" class="card" style="display:none;">
-
-<h2>SWP Calculator</h2>
-
-<label>Investment Amount (₹)</label>
-<input type="number" id="swpCorpus" value="1000000">
-
-<label>Monthly Withdrawal (₹)</label>
-<input type="number" id="swpWithdraw" value="10000">
-
-<button onclick="calcSWP()">Calculate SWP</button>
-
-<div class="result" id="swpResult"></div>
-
-</div>
-
-<a href="https://wa.me/919754436158">
-<button class="whatsapp">📲 WhatsApp पर संपर्क करें</button>
-</a>
-
-<a href="https://cgmf.in/start-your-sip">
-<button class="account">🚀 Free Account Opening</button>
-</a>
+<h3 id="result"></h3>
 
 <script>
+function calc() {
+ let sip = parseFloat(document.getElementById("sip").value);
+ let lump = parseFloat(document.getElementById("lump").value);
+ let years = parseFloat(document.getElementById("years").value);
+ let rate = parseFloat(document.getElementById("rate").value);
 
-function showTab(tab){
+ let r = rate / 100 / 12;
+ let n = years * 12;
 
-document.getElementById('sip').style.display='none';
-document.getElementById('lumpsum').style.display='none';
-document.getElementById('swp').style.display='none';
+ let sipValue = sip * (((Math.pow(1+r,n)-1)/r)*(1+r));
+ let lumpValue = lump * Math.pow(1 + rate/100, years);
 
-document.getElementById(tab).style.display='block';
+ let totalInvestment = (sip * n) + lump;
+ let totalValue = sipValue + lumpValue;
+ let wealthGain = totalValue - totalInvestment;
+
+ document.getElementById("result").innerHTML =
+ "Total Investment: ₹" + Math.round(totalInvestment).toLocaleString() +
+ "<br>Total Value: ₹" + Math.round(totalValue).toLocaleString() +
+ "<br>Wealth Gain: ₹" + Math.round(wealthGain).toLocaleString();
 }
-
-function calcSIP(){
-
-let P=parseFloat(document.getElementById("sipAmount").value);
-let Y=parseFloat(document.getElementById("sipYears").value);
-let R=parseFloat(document.getElementById("sipRate").value)/100/12;
-
-let N=Y*12;
-
-let FV=P*((Math.pow(1+R,N)-1)/R)*(1+R);
-
-let invest=P*N;
-let gain=FV-invest;
-
-document.getElementById("sipResult").innerHTML=
-"Total Investment: ₹"+Math.round(invest).toLocaleString()+
-"<br>Wealth Gain: ₹"+Math.round(gain).toLocaleString()+
-"<br>Maturity Value: ₹"+Math.round(FV).toLocaleString();
-}
-
-function calcLumpsum(){
-
-let P=parseFloat(document.getElementById("lumpAmount").value);
-let Y=parseFloat(document.getElementById("lumpYears").value);
-let R=parseFloat(document.getElementById("lumpRate").value)/100;
-
-let FV=P*Math.pow((1+R),Y);
-
-document.getElementById("lumpResult").innerHTML=
-"Future Value: ₹"+Math.round(FV).toLocaleString();
-}
-
-function calcSWP(){
-
-let corpus=parseFloat(document.getElementById("swpCorpus").value);
-let withdrawal=parseFloat(document.getElementById("swpWithdraw").value);
-
-let months=Math.floor(corpus/withdrawal);
-
-document.getElementById("swpResult").innerHTML=
-"Estimated Duration: "+months+" Months";
-}
-
 </script>
-
-</body>
-</html>
