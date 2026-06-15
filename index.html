@@ -1,10 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>CGMF SIP Calculator</title>
+<style>
+body{
+font-family:Arial,sans-serif;
+max-width:700px;
+margin:auto;
+padding:20px;
+}
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+}
+button{
+background:#5e2a84;
+color:white;
+padding:12px;
+border:none;
+width:100%;
+cursor:pointer;
+}
+.result{
+margin-top:20px;
+padding:15px;
+background:#f4f4f4;
+}
+</style>
 </head>
 <body>
+
 <h1>CGMF SIP Calculator</h1>
-<p>जल्द ही SIP Calculator यहाँ उपलब्ध होगा।</p>
+
+<label>Monthly SIP (₹)</label>
+<input type="number" id="sip" value="500">
+
+<label>Expected Return (%)</label>
+<input type="number" id="rate" value="12">
+
+<label>Investment Period (Years)</label>
+<input type="number" id="years" value="20">
+
+<button onclick="calculateSIP()">Calculate</button>
+
+<div class="result" id="result">
+Enter values and click Calculate
+</div>
+
+<script>
+function calculateSIP() {
+let P = parseFloat(document.getElementById("sip").value);
+let r = parseFloat(document.getElementById("rate").value)/12/100;
+let n = parseFloat(document.getElementById("years").value)*12;
+
+let FV = P * (((Math.pow(1+r,n)-1)/r)*(1+r));
+let invested = P*n;
+let gain = FV-invested;
+
+document.getElementById("result").innerHTML =
+"<h3>Estimated Corpus: ₹"+Math.round(FV).toLocaleString('en-IN')+"</h3>" +
+"<p>Total Investment: ₹"+Math.round(invested).toLocaleString('en-IN')+"</p>" +
+"<p>Estimated Gain: ₹"+Math.round(gain).toLocaleString('en-IN')+"</p>";
+}
+</script>
+
+<p style="font-size:12px;margin-top:20px">
+Mutual Fund investments are subject to market risks. Read all scheme related documents carefully before investing.
+</p>
+
 </body>
 </html>
