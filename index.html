@@ -1,41 +1,62 @@
-<h2>CGMF Investment Calculator</h2>
+<!DOCTYPE html>
+<html>
+<head>
+<title>CGMF SIP Calculator</title>
+<style>
+body{
+font-family:Arial;
+max-width:500px;
+margin:auto;
+padding:20px;
+}
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
+}
+button{
+padding:10px 20px;
+background:#6a1b9a;
+color:white;
+border:none;
+}
+#result{
+font-size:22px;
+font-weight:bold;
+margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<h2>CGMF SIP Calculator</h2>
 
 <label>Monthly SIP (₹)</label>
-<input type="number" id="sip" value="500"><br><br>
-
-<label>Lump Sum Investment (₹)</label>
-<input type="number" id="lump" value="10000"><br><br>
+<input type="number" id="sip" value="500">
 
 <label>Years</label>
-<input type="number" id="years" value="20"><br><br>
+<input type="number" id="years" value="20">
 
 <label>Expected Return (%)</label>
-<input type="number" id="rate" value="12"><br><br>
+<input type="number" id="rate" value="12">
 
 <button onclick="calc()">Calculate</button>
 
-<h3 id="result"></h3>
+<div id="result"></div>
 
 <script>
-function calc() {
- let sip = parseFloat(document.getElementById("sip").value);
- let lump = parseFloat(document.getElementById("lump").value);
- let years = parseFloat(document.getElementById("years").value);
- let rate = parseFloat(document.getElementById("rate").value);
+function calc(){
+let P=document.getElementById("sip").value;
+let Y=document.getElementById("years").value;
+let R=document.getElementById("rate").value/100/12;
 
- let r = rate / 100 / 12;
- let n = years * 12;
+let N=Y*12;
+let FV=P*((Math.pow(1+R,N)-1)/R)*(1+R);
 
- let sipValue = sip * (((Math.pow(1+r,n)-1)/r)*(1+r));
- let lumpValue = lump * Math.pow(1 + rate/100, years);
-
- let totalInvestment = (sip * n) + lump;
- let totalValue = sipValue + lumpValue;
- let wealthGain = totalValue - totalInvestment;
-
- document.getElementById("result").innerHTML =
- "Total Investment: ₹" + Math.round(totalInvestment).toLocaleString() +
- "<br>Total Value: ₹" + Math.round(totalValue).toLocaleString() +
- "<br>Wealth Gain: ₹" + Math.round(wealthGain).toLocaleString();
+document.getElementById("result").innerHTML=
+"Estimated Value: ₹"+Math.round(FV).toLocaleString();
 }
 </script>
+
+</body>
+</html>
